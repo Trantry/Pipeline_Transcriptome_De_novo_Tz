@@ -1,9 +1,4 @@
-cat "fichier1" "Fichier2" > "nouveau_nom". #concatenate
-
-wc -l "nom_fichier" #compte les lignes/nombre de read
-
 #!/bin/bash
-#
 #SBATCH --job-name=kraken2_Tetraripis_zetteli
 #SBATCH --ntasks=24
 #SBATCH --mem=100G
@@ -50,6 +45,10 @@ kraken2 --db standard_database \
 	--unclassified-out leg1_R3_unclassified_reads#.txt \
 	--report leg1_R3_kraken2_report.txt \
 	--gzip-compressed 
+
+#cat "fichier1" "Fichier2" > "nouveau_nom". #concatenate
+
+#wc -l "nom_fichier" #compte les lignes/nombre de read
 
 #concatnenate des version du L2R1-fwd
 #cat Tzet_L2R1_EKRN230022263-1A_HF3NCDSX7_L3_1_fwd-paired.fq.gz \

@@ -13,12 +13,12 @@ module use /applis/PSMN/debian11/E5/modules/all
 
 cd /home/tbessonn/Tetraripis_zetteli/tetraripis_zetteli_leg_transcriptome_novogene/trimmomatic
 
-
+#for parallelise job
 PARAMS=(/Xnfs/khila/omics_data/Novogene/X204SC23042056-Z01-F003/X204SC23042056-Z01-F003/01.RawData/Tzet_L1R1/*_R1_001.fastq.gz)
 
 f1="${PARAMS[$SLURM_ARRAY_TASK_ID]}"
 f2=${PARAMS[$SLURM_ARRAY_TASK_ID]%%_R1_001.fastq.gz}"_R2_001.fastq.gz"
-namef1=$(basename "${PARAMS[$SLURM_ARRAY_TASK_ID]}" "R1_001.fastq.gz" | sed -E 's/_S[0-9]+_L[0-9]+_//')
+namef1=$(basename "${PARAMS[$SLURM_ARRAY_TASK_ID]}" "_R1_001.fastq.gz" 
 
 TrimmomaticPE \
   $f1 \

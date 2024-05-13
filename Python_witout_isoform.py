@@ -1,6 +1,6 @@
-conda activate BUSCO
+#conda activate BUSCO
 
-conda install pandas
+#conda install pandas
 
  import pandas as pd
 import os

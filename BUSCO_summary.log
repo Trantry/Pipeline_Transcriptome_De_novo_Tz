@@ -1,0 +1,28 @@
+2024-05-10 15:17:05 INFO:busco.busco_tools.Toolset	[hmmsearch]	617 of 617 task(s) completed
+2024-05-10 15:17:13 INFO:busco.analysis.GenomeAnalysis	16 candidate overlapping regions found
+2024-05-10 15:17:13 INFO:busco.analysis.GenomeAnalysis	4545 exons in total
+2024-05-10 15:17:16 INFO:busco.busco_tools.hmmer	Results:	C:75.7%[S:37.1%,D:38.6%],F:7.1%,M:17.2%,n:2510	   
+
+2024-05-10 15:17:35 INFO:busco.BuscoRunner	
+
+    ----------------------------------------------------
+    |Results from dataset hemiptera_odb10               |
+    ----------------------------------------------------
+    |C:75.7%[S:37.1%,D:38.6%],F:7.1%,M:17.2%,n:2510     |
+    |1900    Complete BUSCOs (C)                        |
+    |930    Complete and single-copy BUSCOs (S)         |
+    |970    Complete and duplicated BUSCOs (D)          |
+    |177    Fragmented BUSCOs (F)                       |
+    |433    Missing BUSCOs (M)                          |
+    |2510    Total BUSCO groups searched                |
+    ----------------------------------------------------
+2024-05-10 15:17:35 INFO:busco.BuscoRunner	BUSCO analysis done. Total running time: 1791 seconds
+2024-05-10 15:17:35 INFO:busco.BuscoRunner	Results written in /home/tbessonn/Tetraripis_zetteli/tetraripis_zetteli_leg_transcriptome_novogene/8_post_assembly_QC/1.5_complete-transcriptome/3_busco/busco_output
+2024-05-10 15:17:35 INFO:busco.BuscoRunner	For assistance with interpreting the results, please consult the userguide: https://busco.ezlab.org/busco_userguide.html
+
+2024-05-10 15:17:35 INFO:busco.BuscoRunner	Visit this page https://gitlab.com/ezlab/busco#how-to-cite-busco to see how to cite BUSCO
+2024-05-10 15:17:37 DEBUG:urllib3.connectionpool	Starting new HTTPS connection (1): busco-data.ezlab.org:443
+2024-05-10 15:17:37 DEBUG:urllib3.connectionpool	Starting new HTTPS connection (1): busco-data.ezlab.org:443
+2024-05-10 15:17:37 DEBUG:urllib3.connectionpool	https://busco-data.ezlab.org:443 "PUT /upload/rundata202405101517370624323.txt HTTP/1.1" 201 0
+2024-05-10 15:17:37 DEBUG:urllib3.connectionpool	https://busco-data.ezlab.org:443 "PUT /upload/rundata202405101517370624323.txt HTTP/1.1" 201 0
+2024-05-10 15:17:37 DEBUG:busco.run_BUSCO	File uploaded successfully.

@@ -1,4 +1,6 @@
- pip install pandas
+conda activate BUSCO
+
+conda install pandas
 
  import pandas as pd
 import os

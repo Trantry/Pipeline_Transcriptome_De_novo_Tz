@@ -10,7 +10,7 @@ def filter_longest_isoforms(input_file, output_file):
     df = pd.read_csv(input_file, sep='\t')
 
     # Split the 'target_id' into gene and isoform IDs
-    df[['gene_id', 'isoform_id']] = df['target_id'].str.split('_', n=1, expand=True)
+    df[['gene_id', 'isoform_id']] = df['target_id'].str.rsplit('_', n=1, expand=True)
 
     # Group by 'gene_id' and keep the row with the max 'length'
     df_max_length = df.loc[df.groupby('gene_id')['length'].idxmax()]

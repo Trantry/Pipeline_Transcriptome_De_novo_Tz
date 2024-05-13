@@ -2,15 +2,21 @@
 
 #conda install pandas
 
- import pandas as pd
+import pandas as pd
 import os
 
 def filter_longest_isoforms(input_file, output_file):
     # Read the TSV file into a pandas DataFrame
     df = pd.read_csv(input_file, sep='\t')
 
-    # Group by 'target_id' and keep the row with the max 'length'
-    df_max_length = df.loc[df.groupby('target_id')['length'].idxmax()]
+    # Split the 'target_id' into gene and isoform IDs
+    df[['gene_id', 'isoform_id']] = df['target_id'].str.split('_', n=1, expand=True)
+
+    # Group by 'gene_id' and keep the row with the max 'length'
+    df_max_length = df.loc[df.groupby('gene_id')['length'].idxmax()]
+
+    # Drop the 'gene_id' and 'isoform_id' columns
+    df_max_length = df_max_length.drop(columns=['gene_id', 'isoform_id'])
 
     # Write the DataFrame to a new TSV file
     df_max_length.to_csv(output_file, sep='\t', index=False)
@@ -20,7 +26,7 @@ def process_files(input_files):
         # Generate output file name based on input file name
         base_name = os.path.basename(input_file)
         name_without_extension = os.path.splitext(base_name)[0]
-        output_file = f"{name_without_extension}_without_isoforms.tsv"
+        output_file = os.path.join(os.path.dirname(input_file), f"{name_without_extension}_without_isoforms.tsv")
         
         filter_longest_isoforms(input_file, output_file)
 

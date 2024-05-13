@@ -1,6 +1,7 @@
 #conda activate BUSCO
 
 #conda install pandas
+#python /home/tbessonn/Tetraripis_zetteli/tetraripis_zetteli_leg_transcriptome_novogene/8_post_assembly_QC/1.5_complete-transcriptome/1_kallisto/kallisto_output/filtered_isoform.py
 
 import pandas as pd
 import os

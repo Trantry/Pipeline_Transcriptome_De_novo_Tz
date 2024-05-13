@@ -27,7 +27,7 @@
 2024-05-10 15:17:37 DEBUG:urllib3.connectionpool	https://busco-data.ezlab.org:443 "PUT /upload/rundata202405101517370624323.txt HTTP/1.1" 201 0
 2024-05-10 15:17:37 DEBUG:busco.run_BUSCO	File uploaded successfully.
 
-
+###########################################################################################################################################################################################################################################################
 # BUSCO version is: 5.7.1 
 # The lineage dataset is: hemiptera_odb10 (Creation date: 2024-01-08, number of genomes: 16, number of BUSCOs: 2510)
 # Summarized benchmarking in BUSCO notation for file /home/tbessonn/Tetraripis_zetteli/tetraripis_zetteli_leg_transcriptome_novogene/8_post_assembly_QC/1.5_complete-transcriptome/2_Bowtie2/Genome_ref/trinity_tzet_complete_transcriptome.Trinity.fasta

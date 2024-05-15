@@ -11,11 +11,11 @@
 # output : do not use as input for DE analyses based on negative binomial model
 
 BiocManager::install("DESeq2")
-library(DESeq2)
 BiocManager::install("tximport")
-library(tximport)
 install.packages("readr")
 library(readr)
+library(DESeq2)
+library(tximport)
 citation()
 citation("DESeq2")
 citation("tximport")
@@ -74,14 +74,21 @@ names(txi)
 #####################################################################
 
 #make a deseq2 object from the kallisto summarized counts
-ddsMatrix <- DESeqDataSetFromTximport(txi, sampleTable, design= ~condition ) #class: DESeqDataSet dim: 476176 9 
+ddsMatrix <- DESeqDataSetFromTximport(txi, sampleTable, 
+                                      design= ~condition) #class: DESeqDataSet dim: 476176 9 
 #ddsMatrix <- ddsMatrix[rowSums(counts(ddsMatrix)) != 0, ] #class: DESeqDataSet dim: 407829 9 
-ddsMatrix<- na.omit(ddsMatrix) 
+#ddsMatrix<- na.omit(ddsMatrix) 
 
 ddsMatrix<- estimateSizeFactors(ddsMatrix)
+# Calculer le count moyen pour chaque gène
+meanCounts <- rowMeans(counts(ddsMatrix))
+
+# Filtrer les gènes qui ont un count moyen supérieur à 10
+ddsMatrix <- ddsMatrix[meanCounts > 5, ]
+
 
 dds<-DESeq(ddsMatrix)
-dds #class: DESeqDataSet dim: 407829 9 
+dds #class: DESeqDataSet dim: 476176 9  
 dds$condition <- factor(dds$condition) 
 dds$condition <- relevel(dds$condition, ref = "A")
 #dds <- DESeq(dds)
@@ -93,8 +100,11 @@ ntd <- normTransform(dds)
 # variance-stabilizing transformation (vst): faster and similar properties than rlog
 # vsd transformation of normalized counts is only necessary for visualization during quality assessment
 vsd <- vst(dds, blind=TRUE)
+#Optionally, if you want to do variance stabilizing transformation or regularized log transformation on this count matrix and then save as a file: This can become input to things like wgcna, pca
+#vsd<- vst(ddsMatrix, blind=TRUE)
 rld <- rlog(dds, blind=TRUE)    #blind=TRUE : do the transformation in an unbiased manner
 head(assay(vsd), 50)
+
 BiocManager::install("vsn")
 library("vsn")
 
@@ -120,7 +130,7 @@ resultsNames(dds)
 res <- results(dds, contrast=c("condition","F","A"), alpha = 0.05) #same sense
 res #DataFrame with 476176 rows and 6 columns
 #res <- subset(res, baseMean != 0) #DataFrame with 407829 rows and 6 columns
-res <- na.omit(res) #DataFrame with 323768 rows and 6 columns
+#res <- na.omit(res) #DataFrame with 323768 rows and 6 columns
 
 
 #check res data
@@ -136,7 +146,7 @@ BiocManager::install("apeglm")
 resultsNames(dds)
 resLFC <- lfcShrink(dds, coef="condition_F_vs_A", type="apeglm")
 resLFC #DataFrame with 407829 rows and 5 columns
-resLFC<- na.omit(resLFC) #DataFrame with 120706 rows and 5 columns
+#resLFC<- na.omit(resLFC) #DataFrame with 31646 rows and 5 columns
 
 #order our results table by the smallest p value
 resOrdered <- res[order(res$pvalue),]
@@ -152,13 +162,13 @@ summary(res)
 #change the adjusted pval cutoff (automatically = 0.1)
 #res10 <- results(dds, alpha=0.1)
 #summary(res10)
-#out of 407829 with nonzero total read count
+#out of 120335 with nonzero total read count
 #adjusted p-value < 0.1
-#LFC > 0 (up)       : 50, 0.012%
-#LFC < 0 (down)     : 0, 0%
-#outliers [1]       : 84061, 21%
-#low counts [2]     : 203062, 50%
-#(mean count < 1)
+#LFC > 0 (up)       : 136, 0.11%
+#LFC < 0 (down)     : 346, 0.29%
+#outliers [1]       : 37695, 31%
+#low counts [2]     : 42066, 35%
+#(mean count < 15)
 #[1] see 'cooksCutoff' argument of ?results
 #[2] see 'independentFiltering' argument of ?results
 
@@ -172,7 +182,7 @@ summary(res)
 #### MA-PLOT #####
 ##################
 #more useful to visualize the MA-plot for the shrunken log2 fold changes, which remove the noise associated with log2 fold changes from low count genes without requiring arbitrary filtering thresholds.
-DESeq2::plotMA(resLFC,ylim=c(-0.5,0.5),main="condition_Fan_vs_Arolium", alpha = 0.05,
+DESeq2::plotMA(resLFC,ylim=c(-10,10),main="condition_Fan_vs_Arolium",alpha = 0.05,
                colLine = "grey40",  
                colNonSig = "gray60",
                colSig = "blue")
@@ -189,10 +199,22 @@ abline(h=c(-0.05,0.05), col="dodgerblue", lwd=2)
 
 # Filtrer les résultats pour obtenir uniquement les gènes avec une valeur p ajustée inférieure à 0.1
 resSig <- subset(res, padj < 0.05)
-resSig2 <- subset(resLFC, padj < 0.05)
-# Afficher les identifiants des gènes
+#resSig2 <- subset(resLFC, padj < 0.05)
+
+# Afficher les identifiants des gènes differntiellemnt exprimées
 row.names(resSig)
-row.names(resSig2)
+#row.names(resSig2)
+# Sous-ensemble de 'res' où 'padj' est inférieur à 0.05
+resSig <- subset(res, padj < 0.05)
+# Créer un tableau à une colonne avec les identifiants des gènes
+gene_ids <- data.frame(Gene_ID = row.names(resSig))
+# Afficher le tableau
+print(gene_ids)
+# Écrire le tableau dans un fichier .txt 
+write.table(gene_ids, file = "gene_ids.txt", sep = "\t", row.names = FALSE, quote = FALSE, col.names = FALSE)
+
+
+
 ####################################
 ######### Significant DEGs #########
 ####################################
@@ -250,7 +272,7 @@ pheatmap(heatmap_data,
 ##################
 library("pheatmap")
 select <- order(rowMeans(counts(dds,normalized=TRUE)),
-                decreasing=TRUE)[1:49] #Play with the value (gene number)
+                decreasing=TRUE)[1:160] #Play with the value (gene number)
 df <- as.data.frame(colData(dds)[,c("condition")])
 rownames(df) <- colnames(dds)
 pheatmap(assay(ntd)[select,],color=colorRampPalette(c("blue", "white", "red"))(100000), 
@@ -261,9 +283,6 @@ pheatmap(assay(ntd)[select,],color=colorRampPalette(c("blue", "white", "red"))(1
 ########## HEATMAP ########
 ## intra sample distance ##
 ###########################
-#Optionally, if you want to do variance stabilizing transformation or regularized log transformation on this count matrix and then save as a file: This can become input to things like wgcna, pca
-vsd<- vst(ddsMatrix, blind=TRUE)
-
 library("pheatmap")
 ##Extract the vsd matrix from the object
 vsd_mat<-assay(vsd) #transform the object in a matrix (2D data structure)
@@ -326,7 +345,7 @@ ggplot(resLFC_tb, aes(x = log2FoldChange, y = -log10(padj))) +
 ######################
 #by default, plotPCA uses the top 500 most variable genes, can change with ntop=argument
 
-pcaData <- plotPCA(ntd, intgroup=c("condition"), returnData=TRUE,ntop=49)
+pcaData <- plotPCA(ntd, intgroup=c("condition"), returnData=TRUE,ntop=50)
 pcaData["leg"]<- c("L1","L1","L1","L2","L2","L2","L3","L3","L3")
 percentVar <- round(100 * attr(pcaData, "percentVar"))
 str(pcaData)
@@ -341,7 +360,7 @@ pca<-ggplot(pcaData, aes(PC1, PC2, color=leg)) +
 coord_fixed()
 pca
 
-pcaData <- plotPCA(vsd, intgroup=c("condition"), returnData=TRUE,ntop=49)
+pcaData <- plotPCA(vsd, intgroup=c("condition"), returnData=TRUE,ntop=50000)
 pcaData["leg"]<- c("L1","L1","L1","L2","L2","L2","L3","L3","L3")
 percentVar <- round(100 * attr(pcaData, "percentVar"))
 str(pcaData)
@@ -356,7 +375,7 @@ pca<-ggplot(pcaData, aes(PC1, PC2, color=leg)) +
 coord_fixed()
 pca
 
-pcaData <- plotPCA(rld, intgroup=c("condition"), returnData=TRUE,ntop=49)
+pcaData <- plotPCA(rld, intgroup=c("condition"), returnData=TRUE,ntop=50000)
 pcaData["leg"]<- c("L1","L1","L1","L2","L2","L2","L3","L3","L3")
 percentVar <- round(100 * attr(pcaData, "percentVar"))
 str(pcaData)
@@ -411,9 +430,8 @@ ggplot(d, aes(x = sex, y = count, color = sex)) +
 
 
 BiocManager::install('EnhancedVolcano')
-library(EnhancedVolcano)
 BiocManager::install("ashr")
-
+library(EnhancedVolcano)
 
 
 EnhancedVolcano(res,
@@ -438,4 +456,5 @@ plotMA(resLA, ylim=ylim); drawLines()
 plotMA(resG, ylim=ylim); drawLines()
 plotMA(resL, ylim=ylim); drawLines()
 dev.off()
+
 

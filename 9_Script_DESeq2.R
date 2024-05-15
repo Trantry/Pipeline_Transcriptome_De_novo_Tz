@@ -213,6 +213,16 @@ print(gene_ids)
 # Écrire le tableau dans un fichier .txt 
 write.table(gene_ids, file = "gene_ids.txt", sep = "\t", row.names = FALSE, quote = FALSE, col.names = FALSE)
 
+# Créer un tableau avec les gènes surexprimés (LFC > 0)
+overexpressed_genes <- subset(resSig, log2FoldChange > 0)
+overexpressed_gene_ids <- data.frame(Gene_ID = row.names(overexpressed_genes))
+write.table(overexpressed_gene_ids, file = "overexpressed_gene_ids.txt", sep = "\t", row.names = FALSE, quote = FALSE, col.names = FALSE)
+
+# Créer un tableau avec les gènes sous-exprimés (LFC < 0)
+underexpressed_genes <- subset(resSig, log2FoldChange < 0)
+underexpressed_gene_ids <- data.frame(Gene_ID = row.names(underexpressed_genes))
+write.table(underexpressed_gene_ids, file = "underexpressed_gene_ids.txt", sep = "\t", row.names = FALSE, quote = FALSE, col.names = FALSE)
+
 
 
 ####################################

@@ -17,6 +17,11 @@ def filter_longest_isoforms(input_path, output_path):
         record.id = re.sub(r"_i\d+$", "", record.id)
         record.description = record.id
 
+        # Conserver les informations "len=numéro" et "path="
+        len_info = "len=" + str(len(record.seq))
+        path_info = "path=[0:0-" + str(len(record.seq)-1) + "]"
+        record.description += " " + len_info + " " + path_info
+
     with open(output_path, "w") as output_file:
         SeqIO.write(longest_isoforms.values(), output_file, "fasta")
 

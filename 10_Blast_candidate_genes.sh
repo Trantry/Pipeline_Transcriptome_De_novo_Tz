@@ -13,7 +13,7 @@
 cd /home/tbessonn/Tetraripis_zetteli/tetraripis_zetteli_leg_transcriptome_novogene/9_Blast_identity/
 
 # Make a blast database
-makeblastdb -in Genome_ref/Transcriptome_whithout_isoforme.fasta -dbtype nucl -parse_seqids
+#makeblastdb -in Genome_ref/Transcriptome_whithout_isoforme.fasta -dbtype nucl -parse_seqids
 
 # Blast the sequences
 #tblastx -db tzet_transcriptome_trinity.fasta -query geisha_mogsha_genome.fa -out blast_output_geisha_mogsha.txt -outfmt "6"
@@ -21,11 +21,11 @@ makeblastdb -in Genome_ref/Transcriptome_whithout_isoforme.fasta -dbtype nucl -p
 # Create a file containe the IDs of the target sequences
 #awk '{print$2}' blast_output_geisha_mogsha.txt > seqids_geisha_mogsha.txt
 
-# Retrieve the sequences
-blastdbcmd -db Genome_ref/Transcriptome_whithout_isoforme.fasta -dbtype nucl -entry_batch Genes_canditate_200.txt -out retrieved_sequence_Genes_candidate_200.txt
+# Retrieve the sequences 364
+blastdbcmd -db Genome_ref/Transcriptome_whithout_isoforme.fasta -dbtype nucl -entry_batch Candidate_genes_364_pvalue_0.01.txt -out retrieved_sequence_Candidate_genes_364_pvalue_0.01.txt
 
-# Retrieve the sequences for the 76 genes overxpressed
+# Retrieve the sequences for the 105 genes overxpressed
 blastdbcmd -db Genome_ref/Transcriptome_whithout_isoforme.fasta -dbtype nucl -entry_batch overexpressed_gene_ids.txt -out retrieved_sequence_overexpressed_gene_ids.txt
 
-#Same for underexpressed th 124 genes
+#Same for underexpressed th 259 genes
 blastdbcmd -db Genome_ref/Transcriptome_whithout_isoforme.fasta -dbtype nucl -entry_batch underexpressed_gene_ids.txt -out retrieved_sequence_underexpressed_gene_ids.txt

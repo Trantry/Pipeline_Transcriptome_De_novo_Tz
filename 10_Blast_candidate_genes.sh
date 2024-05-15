@@ -24,3 +24,8 @@ makeblastdb -in Genome_ref/Transcriptome_whithout_isoforme.fasta -dbtype nucl -p
 # Retrieve the sequences
 blastdbcmd -db Genome_ref/Transcriptome_whithout_isoforme.fasta -dbtype nucl -entry_batch Genes_canditate_200.txt -out retrieved_sequence_Genes_candidate_200.txt
 
+# Retrieve the sequences for the 76 genes overxpressed
+blastdbcmd -db Genome_ref/Transcriptome_whithout_isoforme.fasta -dbtype nucl -entry_batch overexpressed_gene_ids.txt -out retrieved_sequence_overexpressed_gene_ids.txt
+
+#Same for underexpressed th 124 genes
+blastdbcmd -db Genome_ref/Transcriptome_whithout_isoforme.fasta -dbtype nucl -entry_batch underexpressed_gene_ids.txt -out retrieved_sequence_underexpressed_gene_ids.txt

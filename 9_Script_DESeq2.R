@@ -1,10 +1,28 @@
+#####################################################################
+#####################################################################
+########################## DE-seq 2  ################################
+#####################################################################
+#####################################################################
+# DESeq() function
+# Perform the median of ratios method of normalization
+# Compare genes level between sample
+# Create new columns : log2(FC), pval, padj...
+# output : these normalized count are usefull for visualization of results
+# output : do not use as input for DE analyses based on negative binomial model
 BiocManager::install("DESeq2")
 BiocManager::install("tximport")
 install.packages("readr")
 library(readr)
 library(DESeq2)
 library(tximport)
-
+citation()
+citation("DESeq2")
+citation("tximport")
+citation("readr")
+citation("apeglm")
+citation("pheatmap")
+citation("ggplot2")
+citation("dplyr")
 setwd("/Users/trystan.bessonnier/Desktop/DESeq2_Transcriptome/Control_Deseq")
 ##########################################
 ## Import data & sample preparation ######
@@ -242,7 +260,7 @@ pheatmap(ntd_cor)
 #### MA-PLOT #####
 ##################
 #more useful to visualize the MA-plot for the shrunken log2 fold changes, which remove the noise associated with log2 fold changes from low count genes without requiring arbitrary filtering thresholds.
-DESeq2::plotMA(resLFC,ylim=c(-13,13),main="condition_Fan_vs_Arolium",alpha = 0.01,
+DESeq2::plotMA(resLFC,ylim=c(-13,13),main="condition_Fan_vs_Arolium",alpha = 0.01, (resLFC$log2FoldChange < -1 | resLFC$log2FoldChange > 1 ),
                colLine = "grey40",  
                colNonSig = "gray60",
                colSig = "blue")

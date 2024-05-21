@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --array=0#(0-(n-1) où n: nombre de job en parallèle) ###
-#SBATCH --job-name=QC_complete_transcriptome_Tetraripis ###
+#SBATCH --job-name=2817_underexpressed ###
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=150G
@@ -48,23 +48,38 @@
 #blastdbcmd -db retrieved_sequence_Candidate_shrinkLFC_genes_3743_pvalue_0.01.fasta -dbtype nucl -entry_batch seqids_Protein_homologous_Rhagovelia.txt -out retrieved_sequence_seqids_Protein_homologous_Rhagovelia.txt
  
 
+ ##########################################################################################################
+#See if the intere genes are present in the transcriptome of Tetraripis
+#cd /home/tbessonn/Tetraripis_zetteli/tetraripis_zetteli_leg_transcriptome_novogene/9_Blast_identity/blast_transcriptome_vs_genes-homolog-rhago/
 
+# Make a blast database
+#makeblastdb -in Transcriptome_whithout_isoforme.fasta -dbtype nucl -parse_seqids
+
+# Blast the sequences
+#tblastx -db Transcriptome_whithout_isoforme.fasta  -query Protein_homologous_Rhagovelia.fasta -out blast_output_Protein_homologous_Rhagovelia.txt -outfmt "6" -evalue 1e-20
+
+# Create a file containe the IDs of the target sequences
+#awk '{print$2}' blast_output_Protein_homologous_Rhagovelia.txt > seqids_Protein_homologous_Rhagovelia.txt
+
+# Retrieve the sequences 
+#blastdbcmd -db Transcriptome_whithout_isoforme.fasta -dbtype nucl -entry_batch seqids_Protein_homologous_Rhagovelia.txt -out retrieved_sequence_seqids_Protein_homologous_Rhagovelia.fasta
+ 
 
 ##########################################################################################################
 #Blast whith NCBI data Protein nr Arthropoda present in the 3743 differntial gens expressed in Tetraripis
 cd /home/tbessonn/Tetraripis_zetteli/tetraripis_zetteli_leg_transcriptome_novogene/9_Blast_identity/Blast_NCBI_protein_nr/
 # Make a blast database
-makeblastdb -in /Xnfs/khila/database/BLAST/ncbi_database/ncbi_nr_protein_database/nr -dbtype prot -parse_seqids
+#makeblastdb -in /Xnfs/khila/database/BLAST/ncbi_database/ncbi_nr_protein_database/nr -dbtype prot -parse_seqids
 
 #####################################################################################
 # Blast the sequences 926 overexpressed genes
-blastx -db /Xnfs/khila/database/BLAST/ncbi_database/ncbi_nr_protein_database/nr  -query retrieved_sequence_overexpressed_shrink_LFC_gene_926_ids.fasta -out blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt -outfmt "6" -evalue 1e-20 
+#blastx -db /Xnfs/khila/database/BLAST/ncbi_database/ncbi_nr_protein_database/nr  -query retrieved_sequence_overexpressed_shrink_LFC_gene_926_ids.fasta -out blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt -outfmt "6" -evalue 1e-20 
 
 # Create a file containe the IDs of the target sequences
-awk '{print$2}' blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt > seqids_Protein_blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt
+#awk '{print$2}' blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt > seqids_Protein_blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt
 
 # Retrieve the sequences 
-blastdbcmd -db /Xnfs/khila/database/BLAST/ncbi_database/ncbi_nr_protein_database/nr -entry_batch seqids_Protein_blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt -out retrieved_sequence_seqids_Protein_overexpressed_shrink_LFC_gene_926_ids.fasta
+#blastdbcmd -db /Xnfs/khila/database/BLAST/ncbi_database/ncbi_nr_protein_database/nr -entry_batch seqids_Protein_blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt -out retrieved_sequence_seqids_Protein_overexpressed_shrink_LFC_gene_926_ids.fasta
  
 #####################################################################################
 # Blast the sequences 2817 underexpressed genes

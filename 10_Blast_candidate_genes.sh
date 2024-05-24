@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --array=0#(0-(n-1) où n: nombre de job en parallèle) ###
-#SBATCH --job-name=2817_underexpressed ###
+#SBATCH --job-name=2817_undererexpressed ###
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=24
 #SBATCH --mem=150G
 #SBATCH --time=8-00:00:00 ###
 #SBATCH --partition=Lake
@@ -67,13 +67,13 @@
 
 ##########################################################################################################
 #Blast whith NCBI data Protein nr Arthropoda present in the 3743 differntial gens expressed in Tetraripis
-cd /home/tbessonn/Tetraripis_zetteli/tetraripis_zetteli_leg_transcriptome_novogene/9_Blast_identity/Blast_NCBI_protein_nr/
+cd /home/tbessonn/Tetraripis_zetteli/tetraripis_zetteli_leg_transcriptome_novogene/9_Blast_identity/Blast_NCBI_protein_nr_faster_test/
 # Make a blast database
 #makeblastdb -in /Xnfs/khila/database/BLAST/ncbi_database/ncbi_nr_protein_database/nr -dbtype prot -parse_seqids
 
 #####################################################################################
 # Blast the sequences 926 overexpressed genes
-#blastx -db /Xnfs/khila/database/BLAST/ncbi_database/ncbi_nr_protein_database/nr  -query retrieved_sequence_overexpressed_shrink_LFC_gene_926_ids.fasta -out blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt -outfmt "6" -evalue 1e-20 
+#blastx -db /Xnfs/khila/database/BLAST/ncbi_database/ncbi_nr_protein_database/nr  -query retrieved_sequence_overexpressed_shrink_LFC_gene_926_ids.fasta -out blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt -outfmt "6" -evalue 1e-20 -num_threads 24
 
 # Create a file containe the IDs of the target sequences
 #awk '{print$2}' blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt > seqids_Protein_blast_output_sequence_overexpressed_shrink_LFC_gene_926_ids.txt
@@ -83,7 +83,7 @@ cd /home/tbessonn/Tetraripis_zetteli/tetraripis_zetteli_leg_transcriptome_novoge
  
 #####################################################################################
 # Blast the sequences 2817 underexpressed genes
-blastx -db /Xnfs/khila/database/BLAST/ncbi_database/ncbi_nr_protein_database/nr  -query retrieved_sequence_underexpressed_shrink_LFC_gene_2817_ids.fasta -out blast_output_retrieved_sequence_underexpressed_shrink_LFC_gene_2817_ids.txt -outfmt "6" -evalue 1e-20 
+blastx -db /Xnfs/khila/database/BLAST/ncbi_database/ncbi_nr_protein_database/nr  -query retrieved_sequence_underexpressed_shrink_LFC_gene_2817_ids.fasta -out blast_output_retrieved_sequence_underexpressed_shrink_LFC_gene_2817_ids.txt -outfmt "6" -evalue 1e-20 -num_threads 24
 
 # Create a file containe the IDs of the target sequences
 awk '{print$2}' blast_output_retrieved_sequence_underexpressed_shrink_LFC_gene_2817_ids.txt > seqids_Protein_blast_output_sequence_underexpressed_shrink_LFC_gene_2817_ids.txt

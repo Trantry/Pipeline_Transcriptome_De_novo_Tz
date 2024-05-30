@@ -347,13 +347,18 @@ rownames(res)[rownames(res) == "TRINITY_DN4045_c0_g1"] <- "mogsha"
 rownames(res)[rownames(res) == "TRINITY_DN9986_c0_g2"] <- "SCR"
 #rownames(res)[rownames(res) == "TRINITY_DN1658_c0_g1"] <- "R-ant-yellow"
 rownames(res)[rownames(res) == "TRINITY_DN32148_c0_g1"] <- "CP19/7"
-rownames(res)[rownames(res) == "TRINITY_DN68375_c0_g1"] <- "endocuticle structural glycoprotein SgAbd-1-like"
-rownames(res)[rownames(res) == "TRINITY_DN51005_c0_g1"] <- "transposon TNT 1-94, partial"
+rownames(res)[rownames(res) == "TRINITY_DN68375_c0_g1"] <- "endocuticle structural glycoprotein SgAbd"
+rownames(res)[rownames(res) == "TRINITY_DN51005_c0_g1"] <- "transposon TNT"
 rownames(res)[rownames(res) == "TRINITY_DN35_c0_g1"] <- "retrotransposable element R2DM"
-rownames(res)[rownames(res) == "TRINITY_DN201171_c0_g1"] <- "transposon TNT 1-94, partial"
-rownames(res)[rownames(res) == "TRINITY_DN18770_c0_g1"] <- "piggyBac transposable element"
-rownames(res)[rownames(res) == "TRINITY_DN4669_c1_g1"] <- "piggyBac transposable element"
-rownames(res)[rownames(res) == "TRINITY_DN12309_c0_g1"] <- "cell division cycle protein 23"
+rownames(res)[rownames(res) == "TRINITY_DN201171_c0_g1"] <- "transposon TNT"
+rownames(res)[rownames(res) == "TRINITY_DN18770_c0_g1"] <- "piggyBac TE"
+rownames(res)[rownames(res) == "TRINITY_DN4669_c1_g1"] <- "piggyBac TE"
+rownames(res)[rownames(res) == "TRINITY_DN12309_c0_g1"] <- "CDC 23"
+rownames(res)[rownames(res) == "TRINITY_DN38331_c0_g1"] <- "M-CDK"
+rownames(res)[rownames(res) == "TRINITY_DN91429_c1_g1"] <- "Kinesine"
+rownames(res)[rownames(res) == "TRINITY_DN9112_c0_g1"] <- "Tubuline"
+rownames(res)[rownames(res) == "TRINITY_DN157534_c0_g1"] <- "Dynactine"
+rownames(res)[rownames(res) == "TRINITY_DN1462_c1_g1"] <- "Ubiquitine"
 
 # Générer le volcano plot avec le gène renommé
 super <- EnhancedVolcano(res,
@@ -375,7 +380,7 @@ super <- EnhancedVolcano(res,
                          widthConnectors = 0.5,
                          colConnectors = 'grey30',
                          max.overlaps = 100,
-                         selectLab = c('UBX', 'mogsha', 'SCR', 'CP19/7','endocuticle structural glycoprotein SgAbd-1-like','transposon TNT 1-94, partial','retrotransposable element R2DM', 'piggyBac transposable element', 'piggyBac transposable element','cell division cycle protein 23'), # Utilisation du nouveau nom
+                         selectLab = c('UBX', 'mogsha', 'SCR', 'CP19/7','endocuticle structural glycoprotein SgAbd','transposon TNT','retrotransposable element R2DM', 'piggyBac TE', 'piggyBac TE','CDC 23', 'M-CDK', 'Kinesine', 'Tubuline','Dynactine','Ubiquitine'), # Utilisation du nouveau nom
                          labCol = 'black',
                          labFace = 'bold',
                          boxedLabels = TRUE)
